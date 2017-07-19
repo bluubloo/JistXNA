@@ -11,6 +11,14 @@ namespace JistXNA
     //Keeps track of input and sends messages when input has changed
     class Input
     {
+        //Static identifiers for message parameters
+        public static int MOUSE_X = 0;
+        public static int MOUSE_Y = 1;
+        public static int KEY_DOWN = 2;
+        public static int KEY_UP = 3;
+
+
+
         //Mouse position before update
         private Point mousePosition;
 
@@ -23,7 +31,7 @@ namespace JistXNA
             if(mousePosition == null || !mousePosition.Equals(Mouse.GetState().Position))
             {
                 mousePosition = Mouse.GetState().Position;
-                MessageBus.Publish(new Message("Mouse Moved", mousePosition.X, mousePosition.Y));
+                MessageBus.Publish(new Message("Mouse Moved", new MessageParameter(MOUSE_X, mousePosition.X), new MessageParameter(MOUSE_Y, mousePosition.Y)));
             }
             
             //Check to see if keyboard state has changed
@@ -34,14 +42,14 @@ namespace JistXNA
                 Keys[] down = newKeyboardState.GetPressedKeys().Except(keyboardState.GetPressedKeys()).ToArray();
                 for(int i = 0; i < down.Length; i++)
                 {
-                    MessageBus.Publish(new Message("Key Down", down[i]));
+                    MessageBus.Publish(new Message("Key Down", new MessageParameter(KEY_DOWN, down[i])));
                 }
 
                 //Pulish a message for each key that was lifted up since the last update
                 Keys[] up = keyboardState.GetPressedKeys().Except(newKeyboardState.GetPressedKeys()).ToArray();
                 for (int i = 0; i < up.Length; i++)
                 {
-                    MessageBus.Publish(new Message("Key Up", up[i]));
+                    MessageBus.Publish(new Message("Key Up", new MessageParameter(KEY_UP, up[i])));
                 }
                 keyboardState = newKeyboardState;
             }
