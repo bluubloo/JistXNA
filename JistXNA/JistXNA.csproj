@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="Game1.cs" />
     <Compile Include="Input.cs" />
+    <Compile Include="Map\Chunk.cs" />
+    <Compile Include="Map\Tile.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageBus.cs" />
     <Compile Include="MessageParameter.cs" />
