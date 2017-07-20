@@ -11,7 +11,7 @@ namespace JistXNA
         //Publishes a message
         public static void Publish(Message m)
         {
-            Log(m);
+           
         }
 
         //Logs a message to the console

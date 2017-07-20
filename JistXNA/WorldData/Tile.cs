@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JistXNA.Map
+namespace JistXNA.WorldData
 {
     class Tile
     {
-        public enum Type { Grass }
+        public enum Type:uint { Grass }
     }
 }

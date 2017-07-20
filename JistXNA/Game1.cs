@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using JistXNA.WorldData;
+using JistXNA.Drawing;
+using System.IO;
 
 namespace JistXNA
 {
@@ -12,13 +15,18 @@ namespace JistXNA
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Input input;
-        
+
+        //Keeps track of what tiles are where on the world
+        World world;
+
+        //Renderers
+        WorldRenderer worldRenderer;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            input = new Input();
+            
         }
 
         /// <summary>
@@ -30,6 +38,16 @@ namespace JistXNA
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
+            //Initialise input
+            input = new Input();
+
+            //Create single chunk world
+            world = new World();
+            world.Load(Chunk.GenerateGrass(0, 0));
+
+            //Initialise Renderers
+            worldRenderer = new WorldRenderer();
 
             base.Initialize();
         }
@@ -44,6 +62,19 @@ namespace JistXNA
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+
+            //Load all images in the tiles folder
+            DirectoryInfo dirInfo = new DirectoryInfo(Content.RootDirectory + "/tiles");
+            if (dirInfo.Exists)
+            {
+                FileInfo[] files = dirInfo.GetFiles("*");
+                foreach(FileInfo file in files)
+                {
+                    int textureID = int.Parse(file.Name.Split('_')[0]);
+
+                    worldRenderer.LoadTileTexture((Tile.Type)textureID, Content.Load<Texture2D>("tiles/" + file.Name.Split('.')[0]));
+                }
+            }
         }
 
         /// <summary>
@@ -73,7 +104,7 @@ namespace JistXNA
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
 
